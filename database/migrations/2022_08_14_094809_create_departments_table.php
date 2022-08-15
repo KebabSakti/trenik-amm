@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('company_id');
-            $table->string('name');
+            $table->string('department_name');
             $table->timestamps();
-            $table->index('name');
+            $table->index('company_id');
+            $table->index('department_name');
         });
     }
 

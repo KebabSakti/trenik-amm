@@ -20,7 +20,8 @@ return new class extends Migration
             $table->text('product_description');
             $table->boolean('active')->default(true);
             $table->timestamps();
-            $table->index('name');
+            $table->index('company_id');
+            $table->index('product_name');
         });
     }
 

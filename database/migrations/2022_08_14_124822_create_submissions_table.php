@@ -15,11 +15,10 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('company_id');
             $table->bigInteger('user_id');
             $table->bigInteger('product_id');
-            $table->decimal('price', 12, 2);
-            $table->integer('credit');
+            $table->decimal('sell_price', 12, 2);
+            $table->integer('credit_count');
             $table->decimal('credit_price', 12, 2);
             $table->boolean('approved')->default(false);
             $table->boolean('paid')->default(false);

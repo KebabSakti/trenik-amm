@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('grade_name');
             $table->decimal('max_credit', 12, 2)->nullable();
             $table->timestamps();
-            $table->index('name');
+            $table->index('company_id');
+            $table->index('grade_name');
         });
     }
 

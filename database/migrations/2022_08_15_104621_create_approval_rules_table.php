@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('approvals', function (Blueprint $table) {
+        Schema::create('approval_rules', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('submission_id');
-            $table->bigInteger('user_id');
-            $table->enum('status', ['approved', 'rejected'])->nullable();
-            $table->text('note')->nullable();
+            $table->bigInteger('company_id');
+            $table->bigInteger('department_id');
+            $table->integer('approval_order')->unique();
             $table->timestamps();
-            $table->index('submission_id');
-            $table->index('user_id');
-            $table->index('status');
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('approvals');
+        Schema::dropIfExists('approval_rules');
     }
 };

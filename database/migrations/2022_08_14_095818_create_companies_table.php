@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('company_description')->nullable();
             $table->decimal('monthly_balance', 12, 2)->default(0.00);
             $table->timestamps();
-            $table->index('name');
+            $table->index('company_name');
             $table->index('monthly_balance');
         });
     }

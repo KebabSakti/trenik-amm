@@ -19,11 +19,13 @@ return new class extends Migration
             $table->enum('role', ['admin', 'pic'])->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->text('api');
             $table->rememberToken();
             $table->timestamps();
             $table->index('company_id');
             $table->index('role');
             $table->index('email');
+            $table->index('api');
         });
     }
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DepartmentController extends Controller
+class ApprovalRuleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return view('department.index');
+        //
     }
 
     /**
@@ -24,7 +24,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('department.create');
+        return view('rule.create');
     }
 
     /**
@@ -36,17 +36,17 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'department_name' => 'bail|required',
+            'rule_name' => 'bail|required',
         ]);
 
-        DB::table('departments')->insert([
+        DB::table('rules')->insert([
             'company_id' => $request->user()->company_id,
-            'department_name' => $request->department_name,
+            'rule_name' => $request->rule_name,
             'created_at' => now()->toDateTimeString(),
             'updated_at' => now()->toDateTimeString(),
         ]);
 
-        return redirect()->route('department.index')->with('alert', 'Data berhasil di proses');
+        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
     }
 
     /**
@@ -68,9 +68,9 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('departments')->where('id', $id)->first();
+        $model = DB::table('approval_rules')->where('id', $id)->first();
 
-        return view('department.edit', ['model' => $model]);
+        return view('rule.edit', ['model' => $model]);
     }
 
     /**
@@ -83,17 +83,17 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'department_name' => 'bail|required',
+            'rule_name' => 'bail|required',
         ]);
 
-        DB::table('departments')
+        DB::table('approval_rules')
             ->where('id', $id)
             ->update([
-                'department_name' => $request->department_name,
+                'rule_name' => $request->rule_name,
                 'updated_at' => now()->toDateTimeString(),
             ]);
 
-        return redirect()->route('department.index')->with('alert', 'Data berhasil di proses');
+        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
     }
 
     /**
@@ -104,20 +104,20 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('departments')->where('id', $id)->delete();
+        DB::table('approval_rules')->where('id', $id)->delete();
 
-        return redirect()->route('department.index')->with('alert', 'Data berhasil di proses');
+        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
     }
 
     public function indexJSON(Request $request)
     {
-        $col = ['department_name'];
+        $col = ['rule_name'];
 
-        $query = DB::table('departments');
+        $query = DB::table('approval_rules');
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {
-                $q->where('department_name', 'like', '%' . $request->search['value'] . '%');
+                $q->where('rule_name', 'like', '%' . $request->search['value'] . '%');
             });
         }
 
@@ -138,9 +138,9 @@ class DepartmentController extends Controller
         $data = [];
         foreach ($table as $r) {
             $data[] = [
-                $r->department_name,
-                '<a class="btn btn-info btn-sm" href="' . route('department.edit', $r->id) . '">Edit</a>
-                 <form method="post" action="' . route('department.destroy', $r->id) . '" style="display:inline;">
+                $r->rule_name,
+                '<a class="btn btn-info btn-sm" href="' . route('rule.edit', $r->id) . '">Edit</a>
+                 <form method="post" action="' . route('rule.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">
                     ' . method_field('DELETE') . '
                     <button type="submit" class="btn btn-danger btn-sm" href="#">Hapus</button>

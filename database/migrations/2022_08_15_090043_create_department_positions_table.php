@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('department_positions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('company_id');
             $table->string('position_name');
             $table->timestamps();
             $table->index('position_name');

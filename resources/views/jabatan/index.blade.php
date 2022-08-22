@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:title>List Department</x-slot:title>
+    <x-slot:title>List Jabatan</x-slot:title>
     <x-slot:menu>
-        <a href="{{ route('department.create') }}" class="btn btn-primary">
+        <a href="{{ route('jabatan.create') }}" class="btn btn-primary">
             Tambah Data
         </a>
     </x-slot:menu>
@@ -12,10 +12,10 @@
                 <div class="card-body">
                     <div id="table-default" class="table-responsive">
                         <div class="table-responsive">
-                            <table id="department-table" class="table table-hover" style="width:100%">
+                            <table id="jabatan-table" class="table table-hover" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Nama Department</th>
+                                        <th>Nama Jabatan</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>

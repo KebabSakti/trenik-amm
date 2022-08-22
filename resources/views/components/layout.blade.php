@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="csrf" content="{{ csrf_token() }}" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ $title }} - Tronik AMM</title>
     <!-- Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('static/favicon.ico') }}" />
     <!-- CSS files -->
+    <link href="{{ asset('dist/css/datatables.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('dist/css/tabler.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('dist/css/tabler-flags.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('dist/css/tabler-payments.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('dist/css/tabler-vendors.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('dist/css/demo.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('dist/css/fancybox.css') }}" rel="stylesheet" />
 </head>
 
 <body>
@@ -212,7 +211,7 @@
                 <div class="navbar navbar-light">
                     <div class="container-xl">
                         <ul class="navbar-nav">
-                            <li class="nav-item active">
+                            <li class="nav-item">
                                 <a class="nav-link" href="dashboard">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -236,30 +235,24 @@
                                 <a class="nav-link" href="dashboard">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-building-store" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                            class="icon icon-tabler icon-tabler-users" width="28" height="28"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <line x1="3" y1="21" x2="21" y2="21">
-                                            </line>
-                                            <path
-                                                d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4">
-                                            </path>
-                                            <line x1="5" y1="21" x2="5" y2="10.85">
-                                            </line>
-                                            <line x1="19" y1="21" x2="19" y2="10.85">
-                                            </line>
-                                            <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
                                         </svg>
                                     </span>
                                     <span class="nav-link-title">
-                                        Produk
+                                        Karyawan
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="dashboard">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-clipboard-text" width="28"
@@ -277,29 +270,27 @@
                                         </svg>
                                     </span>
                                     <span class="nav-link-title">
-                                        Pengajuan
+                                        Kredit
                                     </span>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="dashboard">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-settings" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
-                                            </path>
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                        </svg>
-                                    </span>
-                                    <span class="nav-link-title">
-                                        Setting
-                                    </span>
-                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-columns">
+                                        <div class="dropdown-menu-column">
+                                            <a class="dropdown-item" href="">
+                                                List Barang
+                                            </a>
+                                            <a class="dropdown-item" href="">
+                                                Pengajuan
+                                            </a>
+                                            <a class="dropdown-item" href="">
+                                                Cicilan
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('credit_scheme.index') }}">
+                                                Skema Kredit
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
@@ -325,17 +316,17 @@
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item active" href="department">
-                                                Departemen
+                                            <a class="dropdown-item" href="{{ route('department.index') }}">
+                                                Department
                                             </a>
-                                            <a class="dropdown-item" href="">
+                                            <a class="dropdown-item" href="{{ route('jabatan.index') }}">
                                                 Jabatan
                                             </a>
-                                            <a class="dropdown-item" href="">
+                                            <a class="dropdown-item" href="{{ route('grade.index') }}">
                                                 Grade
                                             </a>
-                                            <a class="dropdown-item" href="">
-                                                Produk
+                                            <a class="dropdown-item" href="{{ route('product.index') }}">
+                                                Barang
                                             </a>
                                         </div>
                                     </div>
@@ -415,8 +406,8 @@
                             <ul class="list-inline list-inline-dots mb-0">
                                 <li class="list-inline-item">
                                     Copyright &copy; 2022
-                                    <a href="." class="link-secondary">Tronik AMM</a>.
-                                    All rights reserved.
+                                    <a href="." class="link-secondary">Tronik AMM</a>
+                                    All rights reserved
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="./changelog.html" class="link-secondary" rel="noopener">
@@ -431,9 +422,13 @@
         </div>
     </div>
     <!-- Libs JS -->
+    <script src="{{ asset('dist/js/jquery-3.6.0.min.js') }}" defer></script>
+    <script src="{{ asset('dist/js/axios.min.js') }}" defer></script>
+    <script src="{{ asset('dist/js/datatables.min.js') }}" defer></script>
+    <script src="{{ asset('dist/js/dpipeline.js') }}" defer></script>
+    <script src="{{ asset('dist/js/fancybox.umd.js') }}" defer></script>
     <!-- Tabler Core -->
     <script src="{{ asset('dist/js/tabler.min.js') }}" defer></script>
-    <script src="{{ asset('dist/js/demo.min.js') }}" defer></script>
     <script src="{{ asset('dist/js/custom.js') }}" defer></script>
 </body>
 

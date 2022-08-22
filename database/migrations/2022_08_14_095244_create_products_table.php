@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('company_id');
             $table->string('product_name');
-            $table->text('product_description');
+            $table->string('product_brand');
+            $table->text('product_description')->nullable();
+            $table->text('product_image')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->index('company_id');

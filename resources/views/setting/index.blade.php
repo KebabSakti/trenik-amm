@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:title>List Department</x-slot:title>
+    <x-slot:title>List Grade</x-slot:title>
     <x-slot:menu>
-        <a href="{{ route('department.create') }}" class="btn btn-primary">
+        <a href="{{ route('grade.create') }}" class="btn btn-primary">
             Tambah Data
         </a>
     </x-slot:menu>
@@ -12,10 +12,11 @@
                 <div class="card-body">
                     <div id="table-default" class="table-responsive">
                         <div class="table-responsive">
-                            <table id="department-table" class="table table-hover" style="width:100%">
+                            <table id="grade-table" class="table table-hover" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Nama Department</th>
+                                        <th>Nama Grade</th>
+                                        <th>Limit Pinjaman</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>

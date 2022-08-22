@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('approval_rules', function (Blueprint $table) {
+        Schema::create('approval_rule_details', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('company_id');
-            $table->string('rule_name');
+            $table->bigInteger('approval_rule_id');
+            $table->bigInteger('department_id');
+            $table->integer('approval_order')->unique();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('approval_rules');
+        Schema::dropIfExists('approval_rule_details');
     }
 };

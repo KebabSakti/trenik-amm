@@ -1,10 +1,18 @@
 <?php
 
+use App\Models\ApprovalRule;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\WizardController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ApprovalRuleController;
+use App\Http\Controllers\ApprovalRuleDetailController;
+use App\Http\Controllers\CreditSchemeController;
 
 Route::get('/', function () {
     return redirect('login');
@@ -34,10 +42,12 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index']);
     });
 
-    Route::group(['prefix' => 'department'], function () {
-        Route::get('/', [DepartmentController::class, 'index']);
-        Route::post('/', [DepartmentController::class, 'store']);
-        Route::put('/', [DepartmentController::class, 'update']);
-        Route::delete('/', [DepartmentController::class, 'delete']);
-    });
+    Route::resource('department', DepartmentController::class);
+    Route::resource('jabatan', JabatanController::class);
+    Route::resource('grade', GradeController::class);
+    Route::resource('product', ProductController::class);
+    Route::resource('credit_scheme', CreditSchemeController::class);
+    Route::resource('rule', ApprovalRuleController::class);
+    Route::resource('rule_detail', ApprovalRuleDetailController::class);
+    Route::resource('setting', SettingController::class);
 });

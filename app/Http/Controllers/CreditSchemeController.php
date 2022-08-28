@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreditScheme;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CreditSchemeController extends Controller
 {
@@ -24,7 +27,13 @@ class CreditSchemeController extends Controller
      */
     public function create()
     {
-        $products = $this->products();
+        $products =  Product::where('company_id', Auth::user()->company_id)
+            ->where('active', 1)
+            ->whereNotIn('id', function ($query) {
+                $query->select('product_id')->from('credit_schemes');
+            })
+            ->orderBy('product_name', 'asc')
+            ->get();
 
         return view('credit_scheme.create', ['products' => $products]);
     }
@@ -39,50 +48,29 @@ class CreditSchemeController extends Controller
     {
         $request->validate([
             'product_id' => 'bail|required',
-            'price_1x' => 'bail|required|min:0',
-            'credit_1x' => 'bail|required|min:0',
-            'price_3x' => 'bail|required|min:0',
-            'credit_3x' => 'bail|required|min:0',
-            'price_6x' => 'bail|required|min:0',
-            'credit_6x' => 'bail|required|min:0',
-            'price_9x' => 'bail|required|min:0',
-            'credit_9x' => 'bail|required|min:0',
-            'price_12x' => 'bail|required|min:0',
-            'credit_12x' => 'bail|required|min:0',
         ]);
 
-        DB::table('credit_schemes')->upsert(
-            [
+        for ($i = 0; $i < count($request->counts); $i++) {
+            DB::table('credit_schemes')->upsert(
                 [
-                    'product_id' => $request->product_id,
-                    'price_1x' => $request->price_1x,
-                    'credit_1x' => $request->credit_1x,
-                    'price_3x' => $request->price_3x,
-                    'credit_3x' => $request->credit_3x,
-                    'price_6x' => $request->price_6x,
-                    'credit_6x' => $request->credit_6x,
-                    'price_9x' => $request->price_9x,
-                    'credit_9x' => $request->credit_9x,
-                    'price_12x' => $request->price_12x,
-                    'credit_12x' => $request->credit_12x,
-                    'created_at' => now()->toDateTimeString(),
-                    'updated_at' => now()->toDateTimeString(),
+                    [
+                        'product_id' => $request->product_id,
+                        'count' => $request->counts[$i],
+                        'price' => $request->prices[$i],
+                        'credit' => $request->credits[$i],
+                        'created_at' => now()->toDateTimeString(),
+                        'updated_at' => now()->toDateTimeString(),
+                    ]
+                ],
+                ['product_id'],
+                [
+                    'count',
+                    'price',
+                    'credit',
+                    'updated_at',
                 ]
-            ],
-            [
-                'product_id',
-                'price_1x',
-                'credit_1x',
-                'price_3x',
-                'credit_3x',
-                'price_6x',
-                'credit_6x',
-                'price_9x',
-                'credit_9x',
-                'price_12x',
-                'credit_12x',
-            ]
-        );
+            );
+        }
 
         return redirect()->route('credit_scheme.index')->with('alert', 'Data berhasil di proses');
     }
@@ -106,13 +94,17 @@ class CreditSchemeController extends Controller
      */
     public function edit($id)
     {
-        $credit = DB::table('credit_schemes')
-            ->select('credit_schemes.*', 'credit_schemes.id as scheme_id', 'products.product_name', 'products.id as product_id')
-            ->join('products', 'credit_schemes.product_id', '=', 'products.id')
-            ->where('credit_schemes.id', $id)
+        $product = DB::table('products')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
             ->first();
 
+        $credit = DB::table('credit_schemes')
+            ->where('product_id', $id)
+            ->get();
+
         return view('credit_scheme.edit', [
+            'product' => $product,
             'credit' => $credit,
         ]);
     }
@@ -128,34 +120,21 @@ class CreditSchemeController extends Controller
     {
         $request->validate([
             'product_id' => 'bail|required',
-            'price_1x' => 'bail|required|min:0',
-            'credit_1x' => 'bail|required|min:0',
-            'price_3x' => 'bail|required|min:0',
-            'credit_3x' => 'bail|required|min:0',
-            'price_6x' => 'bail|required|min:0',
-            'credit_6x' => 'bail|required|min:0',
-            'price_9x' => 'bail|required|min:0',
-            'credit_9x' => 'bail|required|min:0',
-            'price_12x' => 'bail|required|min:0',
-            'credit_12x' => 'bail|required|min:0',
         ]);
 
-        DB::table('credit_schemes')
-            ->where('id', $id)
-            ->update([
-                'product_id' => $request->product_id,
-                'price_1x' => $request->price_1x,
-                'credit_1x' => $request->credit_1x,
-                'price_3x' => $request->price_3x,
-                'credit_3x' => $request->credit_3x,
-                'price_6x' => $request->price_6x,
-                'credit_6x' => $request->credit_6x,
-                'price_9x' => $request->price_9x,
-                'credit_9x' => $request->credit_9x,
-                'price_12x' => $request->price_12x,
-                'credit_12x' => $request->credit_12x,
-                'updated_at' => now()->toDateTimeString(),
-            ]);
+        for ($i = 0; $i < count($request->counts); $i++) {
+            DB::table('credit_schemes')
+                ->where('id', $request->ids[$i])
+                ->update(
+                    [
+                        'count' => $request->counts[$i],
+                        'price' => $request->prices[$i],
+                        'credit' => $request->credits[$i],
+                        'created_at' => now()->toDateTimeString(),
+                        'updated_at' => now()->toDateTimeString(),
+                    ],
+                );
+        }
 
         return redirect()->route('credit_scheme.index')->with('alert', 'Data berhasil di proses');
     }
@@ -168,7 +147,7 @@ class CreditSchemeController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('credit_schemes')->where('id', $id)->delete();
+        CreditScheme::where('product_id', $id)->delete();
 
         return redirect()->route('credit_scheme.index')->with('alert', 'Data berhasil di proses');
     }
@@ -176,25 +155,16 @@ class CreditSchemeController extends Controller
     public function indexJSON(Request $request)
     {
         $col = [
-            'products.product_name',
-            'credit_scheme.price_1x',
-            'credit_scheme.credit_1x',
-            'credit_scheme.price_3x',
-            'credit_scheme.credit_3x',
-            'credit_scheme.price_6x',
-            'credit_scheme.credit_6x',
-            'credit_scheme.price_9x',
-            'credit_scheme.credit_9x',
-            'credit_scheme.price_12x',
-            'credit_scheme.credit_12x',
+            'product_name',
         ];
 
-        $query = DB::table('credit_schemes')
-            ->select('credit_schemes.*', 'credit_schemes.id as scheme_id', 'products.product_name')
-            ->join('products', 'credit_schemes.product_id', '=', 'products.id');
+        $query = Product::where('company_id', $request->company_id)
+            ->whereIn('id', function ($q) {
+                $q->select('product_id')->from('credit_schemes')->where('deleted_at', null);
+            });
 
         if (!empty($request->search['value'])) {
-            $query->where('products.product_name', 'like', '%' . $request->search['value'] . '%');
+            $query->where('product_name', 'like', '%' . $request->search['value'] . '%');
         }
 
         //total record
@@ -213,20 +183,14 @@ class CreditSchemeController extends Controller
 
         $data = [];
         foreach ($table as $r) {
+            // $scheme = DB::table('credit_schemes')->where('product_id', $r->id)->first();
+            // $status = $scheme != null ? '<span class="badge rounded-pill text-bg-success">Aktif</span>' : '<span class="badge rounded-pill text-bg-danger">Non Aktif</span>';
+            // $edit = $scheme != null ? '<a class="btn btn-info btn-sm" href="' . route('credit_scheme.edit', $r->id) . '">Edit</a>' : '-';
+
             $data[] = [
                 $r->product_name,
-                'Rp ' . number_format($r->price_1x, 0, ',', '.'),
-                'Rp ' . number_format($r->credit_1x, 0, ',', '.'),
-                'Rp ' . number_format($r->price_3x, 0, ',', '.'),
-                'Rp ' . number_format($r->credit_3x, 0, ',', '.'),
-                'Rp ' . number_format($r->price_6x, 0, ',', '.'),
-                'Rp ' . number_format($r->credit_6x, 0, ',', '.'),
-                'Rp ' . number_format($r->price_9x, 0, ',', '.'),
-                'Rp ' . number_format($r->credit_9x, 0, ',', '.'),
-                'Rp ' . number_format($r->price_12x, 0, ',', '.'),
-                'Rp ' . number_format($r->credit_12x, 0, ',', '.'),
-                '<a class="btn btn-info btn-sm" href="' . route('credit_scheme.edit', $r->scheme_id) . '">Edit</a>
-                 <form method="post" action="' . route('credit_scheme.destroy', $r->scheme_id) . '" style="display:inline;">
+                '<a class="btn btn-info btn-sm" href="' . route('credit_scheme.edit', $r->id) . '">Detail / Edit</a>
+                <form method="post" action="' . route('credit_scheme.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">
                     ' . method_field('DELETE') . '
                     <button type="submit" class="btn btn-danger btn-sm" href="#">Hapus</button>
@@ -240,16 +204,5 @@ class CreditSchemeController extends Controller
             'recordsFiltered' => $filter,
             'data' => $data
         ]);
-    }
-
-    private function products()
-    {
-        $products = DB::table('products')
-            ->where('active', 1)
-            ->whereNotIn('id', function ($query) {
-                $query->select('product_id')->from('credit_schemes');
-            })->get();
-
-        return $products;
     }
 }

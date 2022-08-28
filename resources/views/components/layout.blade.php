@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="csrf" content="{{ csrf_token() }}" />
+    <meta name="company" content="{{ Auth::user()->company_id }}" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ $title }} - Tronik AMM</title>
     <!-- Icon -->
@@ -30,7 +31,7 @@
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
                     <div class="d-none d-md-flex">
-                        <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
+                        {{-- <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
                             data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -40,7 +41,7 @@
                                 <path
                                     d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
                             </svg>
-                        </a>
+                        </a> --}}
                         <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode"
                             data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
@@ -87,10 +88,9 @@
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
                                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon text-muted" width="24" height="24"
-                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none"
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted"
+                                                            width="24" height="24" viewBox="0 0 24 24"
+                                                            stroke-width="2" stroke="currentColor" fill="none"
                                                             stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path
@@ -232,7 +232,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="dashboard">
+                                <a class="nav-link" href="{{ route('employee.index') }}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-users" width="28" height="28"
@@ -276,7 +276,7 @@
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" href="">
+                                            <a class="dropdown-item" href="{{ route('barang.index') }}">
                                                 List Barang
                                             </a>
                                             <a class="dropdown-item" href="">
@@ -285,9 +285,7 @@
                                             <a class="dropdown-item" href="">
                                                 Cicilan
                                             </a>
-                                            <a class="dropdown-item" href="{{ route('credit_scheme.index') }}">
-                                                Skema Kredit
-                                            </a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -327,6 +325,40 @@
                                             </a>
                                             <a class="dropdown-item" href="{{ route('product.index') }}">
                                                 Barang
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-settings" width="28"
+                                            height="28" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path
+                                                d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
+                                            </path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Setting
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-columns">
+                                        <div class="dropdown-menu-column">
+                                            <a class="dropdown-item" href="{{ route('credit_scheme.index') }}">
+                                                Skema Kredit
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('rule.index') }}">
+                                                Aturan Pengajuan
                                             </a>
                                         </div>
                                     </div>

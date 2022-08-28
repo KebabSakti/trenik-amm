@@ -16,66 +16,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Harga Jual</label>
-                                    <input type="number" min="0" class="form-control" name="price_1x"
-                                        placeholder="Harga jual" required>
+                            @for ($i = 1; $i <= 12; $i > 1 ? ($i += 3) : ($i += 2))
+                                <input type="hidden" name="counts[]" value="{{ $i }}">
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label">Harga Jual</label>
+                                        <input type="number" min="0" class="form-control" name="prices[]"
+                                            placeholder="Harga jual" required>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label">Cicilan {{ $i }}x</label>
+                                        <input type="number" min="0" class="form-control" name="credits[]"
+                                            placeholder="Cicilan {{ $i }}x" required>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label class="form-label">Cicilan 1x</label>
-                                    <input type="number" min="0" class="form-control" name="credit_1x"
-                                        placeholder="Cicilan 1x" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Harga Jual</label>
-                                    <input type="number" min="0" class="form-control" name="price_3x"
-                                        placeholder="Harga jual" required>
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Cicilan 3x</label>
-                                    <input type="number" min="0" class="form-control" name="credit_3x"
-                                        placeholder="Cicilan 3x" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Harga Jual</label>
-                                    <input type="number" min="0" class="form-control" name="price_6x"
-                                        placeholder="Harga jual" required>
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Cicilan 6x</label>
-                                    <input type="number" min="0" class="form-control" name="credit_6x"
-                                        placeholder="Cicilan 6x" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Harga Jual</label>
-                                    <input type="number" min="0" class="form-control" name="price_9x"
-                                        placeholder="Harga jual" required>
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Cicilan 9x</label>
-                                    <input type="number" min="0" class="form-control" name="credit_9x"
-                                        placeholder="Cicilan 9x" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Harga Jual</label>
-                                    <input type="number" min="0" class="form-control" name="price_12x"
-                                        placeholder="Harga jual" required>
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Cicilan 12x</label>
-                                    <input type="number" min="0" class="form-control" name="credit_12x"
-                                        placeholder="Cicilan 12x" required>
-                                </div>
-                            </div>
+                            @endfor
                             <div class="form-footer">
                                 <a href="{{ url()->previous() }}" class="btn btn-warning">Batal</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>

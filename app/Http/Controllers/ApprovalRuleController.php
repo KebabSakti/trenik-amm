@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApprovalRule;
 use Illuminate\Http\Request;
+use App\Models\ApprovalRuleDetail;
+use App\Models\Department;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ApprovalRuleController extends Controller
 {
@@ -14,7 +18,8 @@ class ApprovalRuleController extends Controller
      */
     public function index()
     {
-        //
+
+        return view('rule.index');
     }
 
     /**
@@ -24,7 +29,15 @@ class ApprovalRuleController extends Controller
      */
     public function create()
     {
-        return view('rule.create');
+        $departments = Department::whereNotIn('id', function ($q) {
+            $q->select('department_id')->from('approval_rules');
+        })
+            ->where('company_id', Auth::user()->company_id)
+            ->get();
+
+        return view('rule.create', [
+            'departments' => $departments
+        ]);
     }
 
     /**
@@ -36,17 +49,27 @@ class ApprovalRuleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rule_name' => 'bail|required',
+            'department_id' => 'bail|required',
         ]);
 
-        DB::table('rules')->insert([
-            'company_id' => $request->user()->company_id,
-            'rule_name' => $request->rule_name,
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ]);
+        if (!$request->department_ids) {
+            return redirect()->route('rule.index')->withErrors('Anda belum menambahkan rule');
+        }
 
-        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
+        $rule = new ApprovalRule;
+        $rule->company_id = $request->user()->company_id;
+        $rule->department_id = $request->department_id;
+        $rule->save();
+
+        for ($i = 0; $i < count($request->department_ids); $i++) {
+            $ruleDetail = new ApprovalRuleDetail();
+            $ruleDetail->approval_rule_id = $rule->id;
+            $ruleDetail->department_id = $request->department_ids[$i];
+            $ruleDetail->approval_order = $i + 1;
+            $ruleDetail->save();
+        }
+
+        return redirect()->route('rule.index')->with('alert', 'Data berhasil di proses');
     }
 
     /**
@@ -68,9 +91,22 @@ class ApprovalRuleController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('approval_rules')->where('id', $id)->first();
+        $rule = DB::table('approval_rules')
+            ->selectRaw('approval_rules.*, departments.department_name')
+            ->join('departments', 'approval_rules.department_id', '=', 'departments.id')
+            ->where('approval_rules.company_id', Auth::user()->company_id)
+            ->where('approval_rules.id', $id)
+            ->first();
 
-        return view('rule.edit', ['model' => $model]);
+        $ruleDetails = DB::table('approval_rule_details')->where('approval_rule_id', $id)->get();
+
+        $departments = Department::where('company_id', Auth::user()->company_id)->get();
+
+        return view('rule.edit', [
+            'rule' => $rule,
+            'rule_details' => $ruleDetails,
+            'departments' => $departments
+        ]);
     }
 
     /**
@@ -82,18 +118,24 @@ class ApprovalRuleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'rule_name' => 'bail|required',
-        ]);
-
         DB::table('approval_rules')
+            ->where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->update([
-                'rule_name' => $request->rule_name,
                 'updated_at' => now()->toDateTimeString(),
             ]);
 
-        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
+        DB::table('approval_rule_details')->where('approval_rule_id', $id)->delete();
+
+        for ($i = 0; $i < count($request->department_ids); $i++) {
+            $ruleDetail = new ApprovalRuleDetail();
+            $ruleDetail->approval_rule_id = $id;
+            $ruleDetail->department_id = $request->department_ids[$i];
+            $ruleDetail->approval_order = $i + 1;
+            $ruleDetail->save();
+        }
+
+        return redirect()->route('rule.index')->with('alert', 'Data berhasil di proses');
     }
 
     /**
@@ -104,20 +146,28 @@ class ApprovalRuleController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('approval_rules')->where('id', $id)->delete();
+        DB::table('approval_rule_details')->where('approval_rule_id', $id)->delete();
 
-        return redirect()->route('setting.index')->with('alert', 'Data berhasil di proses');
+        DB::table('approval_rules')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->delete();
+
+        return redirect()->route('rule.index')->with('alert', 'Data berhasil di proses');
     }
 
     public function indexJSON(Request $request)
     {
-        $col = ['rule_name'];
+        $col = ['description'];
 
-        $query = DB::table('approval_rules');
+        $query = ApprovalRule::selectRaw('approval_rules.*, departments.department_name')
+            ->join('departments', 'approval_rules.department_id', '=', 'departments.id')
+            ->where('approval_rules.company_id', $request->company_id)
+            ->where('departments.deleted_at', null);
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {
-                $q->where('rule_name', 'like', '%' . $request->search['value'] . '%');
+                $q->where('description', 'like', '%' . $request->search['value'] . '%');
             });
         }
 
@@ -137,8 +187,19 @@ class ApprovalRuleController extends Controller
 
         $data = [];
         foreach ($table as $r) {
+            $ruleDetails = DB::table('approval_rule_details')
+                ->join('departments', 'approval_rule_details.department_id', '=', 'departments.id')
+                ->where('approval_rule_id', $r->id)
+                ->get();
+
+            $depts = [];
+            foreach ($ruleDetails as $ruleDetail) {
+                array_push($depts, $ruleDetail->department_name);
+            }
+
             $data[] = [
-                $r->rule_name,
+                $r->department_name,
+                implode(' -> ', $depts),
                 '<a class="btn btn-info btn-sm" href="' . route('rule.edit', $r->id) . '">Edit</a>
                  <form method="post" action="' . route('rule.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">

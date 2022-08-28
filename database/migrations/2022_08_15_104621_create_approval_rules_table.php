@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('approval_rules', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('company_id');
-            $table->string('rule_name');
+            $table->bigInteger('department_id');
+            $table->string('description')->nullable();
             $table->timestamps();
+            $table->index('department_id');
         });
     }
 

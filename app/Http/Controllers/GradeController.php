@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class GradeController extends Controller
 {
@@ -70,7 +72,10 @@ class GradeController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('grades')->where('id', $id)->first();
+        $model = DB::table('grades')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->first();
 
         return view('grade.edit', ['model' => $model]);
     }
@@ -90,6 +95,7 @@ class GradeController extends Controller
         ]);
 
         DB::table('grades')
+            ->where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->update([
                 'grade_name' => $request->grade_name,
@@ -108,7 +114,9 @@ class GradeController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('grades')->where('id', $id)->delete();
+        Grade::where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->delete();
 
         return redirect()->route('grade.index')->with('alert', 'Data berhasil di proses');
     }
@@ -117,7 +125,8 @@ class GradeController extends Controller
     {
         $col = ['grade_name', 'max_credit'];
 
-        $query = DB::table('grades');
+        $query = Grade::where('company_id', $request->company_id);
+
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {

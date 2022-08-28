@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ApprovalRule extends Model
+class SubmissionAttachment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 }

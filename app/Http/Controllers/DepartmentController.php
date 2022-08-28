@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DepartmentController extends Controller
 {
@@ -68,7 +70,10 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('departments')->where('id', $id)->first();
+        $model = DB::table('departments')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->first();
 
         return view('department.edit', ['model' => $model]);
     }
@@ -87,6 +92,7 @@ class DepartmentController extends Controller
         ]);
 
         DB::table('departments')
+            ->where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->update([
                 'department_name' => $request->department_name,
@@ -104,7 +110,9 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('departments')->where('id', $id)->delete();
+        Department::where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->delete();
 
         return redirect()->route('department.index')->with('alert', 'Data berhasil di proses');
     }
@@ -113,7 +121,7 @@ class DepartmentController extends Controller
     {
         $col = ['department_name'];
 
-        $query = DB::table('departments');
+        $query = Department::where('company_id', $request->company_id);
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {

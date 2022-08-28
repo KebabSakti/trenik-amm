@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DepartmentPosition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class JabatanController extends Controller
 {
@@ -68,7 +70,10 @@ class JabatanController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('department_positions')->where('id', $id)->first();
+        $model = DB::table('department_positions')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->first();
 
         return view('jabatan.edit', ['model' => $model]);
     }
@@ -87,6 +92,7 @@ class JabatanController extends Controller
         ]);
 
         DB::table('department_positions')
+            ->where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->update([
                 'position_name' => $request->position_name,
@@ -104,7 +110,9 @@ class JabatanController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('department_positions')->where('id', $id)->delete();
+        DepartmentPosition::where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->delete();
 
         return redirect()->route('jabatan.index')->with('alert', 'Data berhasil di proses');
     }
@@ -113,7 +121,8 @@ class JabatanController extends Controller
     {
         $col = ['position_name'];
 
-        $query = DB::table('department_positions');
+        $query = DepartmentPosition::where('company_id', $request->company_id);
+
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {

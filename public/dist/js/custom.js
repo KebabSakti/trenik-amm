@@ -1,6 +1,7 @@
 $(function () {
     const url = "http://localhost:1001/api/";
     const csrf = $("meta[name=csrf]").attr("content");
+    const company = $("meta[name=company]").attr("content");
 
     function AxiosInstance() {
         const instance = axios.create({
@@ -37,6 +38,7 @@ $(function () {
                 method: "POST",
                 data: function (param) {
                     param.csrf = csrf;
+                    param.company_id = company;
                 },
                 pages: 5,
             }),
@@ -63,6 +65,7 @@ $(function () {
                 method: "POST",
                 data: function (param) {
                     param.csrf = csrf;
+                    param.company_id = company;
                 },
                 pages: 5,
             }),
@@ -93,6 +96,7 @@ $(function () {
                 method: "POST",
                 data: function (param) {
                     param.csrf = csrf;
+                    param.company_id = company;
                 },
                 pages: 5,
             }),
@@ -131,6 +135,7 @@ $(function () {
                 method: "POST",
                 data: function (param) {
                     param.csrf = csrf;
+                    param.company_id = company;
                 },
                 pages: 5,
             }),
@@ -152,37 +157,29 @@ $(function () {
                     searchable: false,
                     orderable: false,
                 },
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: url + "app/credit_scheme",
+                method: "POST",
+                data: function (param) {
+                    param.csrf = csrf;
+                    param.company_id = company;
+                },
+                pages: 5,
+            }),
+        });
+    }
+
+    if ($("#rule-table").length) {
+        let ruleTable = $("#rule-table").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            order: [0, "asc"],
+            columns: [
                 {
-                    searchable: false,
+                    searchable: true,
                     orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
                 },
                 {
                     searchable: false,
@@ -194,10 +191,129 @@ $(function () {
                 },
             ],
             ajax: $.fn.dataTable.pipeline({
-                url: url + "app/credit_scheme",
+                url: url + "app/rule",
                 method: "POST",
                 data: function (param) {
                     param.csrf = csrf;
+                    param.company_id = company;
+                },
+                pages: 5,
+            }),
+        });
+    }
+
+    if ($("#rule-container").length) {
+        let ruleItem = $(".rule-item");
+
+        $("#rule-add").click(function () {
+            $("#rule-container").append(ruleItem.clone());
+        });
+
+        $("body").on("click", ".rule-del", function () {
+            if ($(".rule-item").length > 1) {
+                $(this).closest(".rule-item").remove();
+            }
+        });
+    }
+
+    if ($("#barang-table").length) {
+        let barangTable = $("#barang-table").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            order: [0, "asc"],
+            columns: [
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+                // {
+                //     searchable: false,
+                //     orderable: false,
+                // },
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: url + "app/barang",
+                method: "POST",
+                data: function (param) {
+                    param.csrf = csrf;
+                    param.company_id = company;
+                },
+                pages: 5,
+            }),
+        });
+    }
+
+    if ($("#employee-table").length) {
+        let employeeTable = $("#employee-table").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            order: [0, "asc"],
+            columns: [
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: false,
+                },
+                {
+                    searchable: true,
+                    orderable: false,
+                },
+                {
+                    searchable: true,
+                    orderable: false,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: url + "app/employee",
+                method: "POST",
+                data: function (param) {
+                    param.csrf = csrf;
+                    param.company_id = company;
                 },
                 pages: 5,
             }),

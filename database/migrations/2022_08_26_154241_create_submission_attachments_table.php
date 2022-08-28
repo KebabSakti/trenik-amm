@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('credit_schemes', function (Blueprint $table) {
+        Schema::create('submission_attachments', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('product_id');
-            $table->integer('count');
-            $table->decimal('price', 12, 2);
-            $table->decimal('credit', 12, 2);
+            $table->bigInteger('submission_id');
+            $table->text('foto');
+            $table->text('permit');
             $table->timestamps();
-            $table->index('product_id');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('credit_schemes');
+        Schema::dropIfExists('submission_attachments');
     }
 };

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Modules\FileModule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -80,7 +82,10 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $model = DB::table('products')->where('id', $id)->first();
+        $model = DB::table('products')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->first();
 
         return view('product.edit', ['model' => $model]);
     }
@@ -99,7 +104,10 @@ class ProductController extends Controller
             'product_brand' => 'bail|required',
         ]);
 
-        $product = DB::table('products')->where('id', $id)->first();
+        $product = DB::table('products')
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->first();
 
         if ($product == null) {
             return redirect()->route('product.index')->withErrors('Data tidak ditemukan');
@@ -117,6 +125,7 @@ class ProductController extends Controller
         }
 
         DB::table('products')
+            ->where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->update([
                 'product_name' => $request->product_name,
@@ -138,19 +147,22 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = DB::table('products')->where('id', $id)->first();
+        // $product = Product::where('company_id', Auth::user()->company_id)
+        //     ->where('id', $id)->first();
 
-        if ($product == null) {
-            return redirect()->route('product.index')->withErrors('Data tidak ditemukan');
-        }
+        // if ($product == null) {
+        //     return redirect()->route('product.index')->withErrors('Data tidak ditemukan');
+        // }
 
-        $file = $product->product_image;
+        // $file = $product->product_image;
 
-        if ($file != null) {
-            FileModule::delete($file);
-        }
+        // if ($file != null) {
+        //     FileModule::delete($file);
+        // }
 
-        DB::table('products')->where('id', $id)->delete();
+        Product::where('company_id', Auth::user()->company_id)
+            ->where('id', $id)
+            ->delete();
 
         return redirect()->route('product.index')->with('alert', 'Data berhasil di proses');
     }
@@ -164,7 +176,8 @@ class ProductController extends Controller
             'active',
         ];
 
-        $query = DB::table('products');
+        $query = Product::where('company_id', $request->company_id);
+
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {
@@ -189,11 +202,13 @@ class ProductController extends Controller
 
         $data = [];
         foreach ($table as $r) {
+            $status = $r->active == 1 ? '<span class="badge rounded-pill text-bg-success">Aktif</span>' : '<span class="badge rounded-pill text-bg-danger">Non Aktif</span>';
+
             $data[] = [
                 $r->product_name,
                 $r->product_brand,
                 $r->product_image == null ? '-' : '<a data-fancybox href=' . asset($r->product_image) . '>Lihat Gambar</a>',
-                $r->active == 1 ? 'Aktif' : 'Non Aktif',
+                $status,
                 '<a class="btn btn-info btn-sm" href="' . route('product.edit', $r->id) . '">Edit</a>
                  <form method="post" action="' . route('product.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">

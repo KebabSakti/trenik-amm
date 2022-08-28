@@ -15,16 +15,6 @@
                             <thead>
                                 <tr>
                                     <th>Barang</th>
-                                    <th>Harga Jual</th>
-                                    <th>Cicilan 1x</th>
-                                    <th>Harga Jual</th>
-                                    <th>Cicilan 3x</th>
-                                    <th>Harga Jual</th>
-                                    <th>Cicilan 6x</th>
-                                    <th>Harga Jual</th>
-                                    <th>Cicilan 9x</th>
-                                    <th>Harga Jual</th>
-                                    <th>Cicilan 12x</th>
                                     <th>#</th>
                                 </tr>
                             </thead>

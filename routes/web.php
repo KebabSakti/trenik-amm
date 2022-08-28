@@ -1,17 +1,17 @@
 <?php
 
-use App\Models\ApprovalRule;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\WizardController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ApprovalRuleController;
-use App\Http\Controllers\ApprovalRuleDetailController;
 use App\Http\Controllers\CreditSchemeController;
 
 Route::get('/', function () {
@@ -48,6 +48,6 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth'], function () {
     Route::resource('product', ProductController::class);
     Route::resource('credit_scheme', CreditSchemeController::class);
     Route::resource('rule', ApprovalRuleController::class);
-    Route::resource('rule_detail', ApprovalRuleDetailController::class);
-    Route::resource('setting', SettingController::class);
+    Route::resource('barang', BarangController::class);
+    Route::resource('employee', EmployeeController::class);
 });

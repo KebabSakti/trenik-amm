@@ -17,11 +17,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->bigInteger('product_id');
-            $table->decimal('sell_price', 12, 2);
-            $table->integer('credit_count');
-            $table->decimal('credit_price', 12, 2);
-            $table->boolean('approved')->default(false);
-            $table->boolean('paid')->default(false);
+            $table->bigInteger('credit_scheme_id');
+            $table->enum('submission_status', ['pending', 'approved', 'rejected']);
+            $table->enum('payment_status', ['unpaid', 'progress', 'paid']);
             $table->timestamps();
             $table->index('user_id');
             $table->index('product_id');

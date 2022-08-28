@@ -23,8 +23,14 @@ return new class extends Migration
             $table->string('nik');
             $table->string('phone');
             $table->string('ktp');
-            $table->decimal('employee_balance', 12, 2);
             $table->timestamps();
+            $table->index('user_id');
+            $table->index('department_id');
+            $table->index('grade_id');
+            $table->index('employee_name');
+            $table->index('nik');
+            $table->index('phone');
+            $table->index('ktp');
         });
     }
 

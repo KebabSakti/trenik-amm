@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="csrf" content="{{ csrf_token() }}" />
     <meta name="company" content="{{ Auth::user()->company_id }}" />
+    <meta name="user" content="{{ Auth::user()->id }}" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ $title }} - Tronik AMM</title>
     <!-- Icon -->
@@ -89,9 +90,9 @@
                                                     <a href="#" class="list-group-item-actions">
                                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            stroke-width="2" stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path
                                                                 d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -112,11 +113,10 @@
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions show">
                                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon text-yellow" width="24" height="24"
-                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-yellow"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path
                                                                 d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -137,11 +137,10 @@
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
                                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon text-muted" width="24" height="24"
-                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path
                                                                 d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -164,11 +163,10 @@
                                                 <div class="col-auto">
                                                     <a href="#" class="list-group-item-actions">
                                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon text-muted" width="24" height="24"
-                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                            stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted"
+                                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                                            stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path
                                                                 d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" />
@@ -186,9 +184,9 @@
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                             aria-label="Open user menu">
                             <svg class="icon-filled text-blue" xmlns="http://www.w3.org/2000/svg"
-                                class="icon icon-tabler icon-tabler-user" width="28" height="28"
-                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round">
+                                class="icon icon-tabler icon-tabler-user" width="28" height="28" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
@@ -215,10 +213,9 @@
                                 <a class="nav-link" href="dashboard">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-layout-dashboard" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                            class="icon icon-tabler icon-tabler-layout-dashboard" width="28" height="28"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M4 4h6v8h-6z"></path>
                                             <path d="M4 16h6v4h-6z"></path>
@@ -231,13 +228,15 @@
                                     </span>
                                 </a>
                             </li>
+
+                            @if (Auth::user()->role == 'admin')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('employee.index') }}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-users" width="28" height="28"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <circle cx="9" cy="7" r="4"></circle>
                                             <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
@@ -250,21 +249,21 @@
                                     </span>
                                 </a>
                             </li>
+                            @endif
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
                                     data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-clipboard-text" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                            class="icon icon-tabler icon-tabler-clipboard-text" width="28" height="28"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path
                                                 d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
                                             </path>
-                                            <rect x="9" y="3" width="6" height="4"
-                                                rx="2"></rect>
+                                            <rect x="9" y="3" width="6" height="4" rx="2"></rect>
                                             <path d="M9 12h6"></path>
                                             <path d="M9 16h6"></path>
                                         </svg>
@@ -279,26 +278,50 @@
                                             <a class="dropdown-item" href="{{ route('barang.index') }}">
                                                 List Barang
                                             </a>
-                                            <a class="dropdown-item" href="">
+                                            <a class="dropdown-item" href="{{ route('submission.index') }}">
                                                 Pengajuan
                                             </a>
-                                            <a class="dropdown-item" href="">
+                                            {{-- <a class="dropdown-item" href="">
                                                 Cicilan
-                                            </a>
+                                            </a> --}}
 
                                         </div>
                                     </div>
                                 </div>
                             </li>
+
+                            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pic')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('picapprove.index')}}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-file-report" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <circle cx="17" cy="17" r="4"></circle>
+                                            <path d="M17 13v4h4"></path>
+                                            <path d="M12 3v4a1 1 0 0 0 1 1h4"></path>
+                                            <path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Pengajuan
+                                    </span>
+                                </a>
+                            </li>
+                            @endif
+
+                            @if (Auth::user()->role == 'admin')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
                                     data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/package -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                            height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3" />
                                             <line x1="12" y1="12" x2="20" y2="7.5" />
@@ -330,16 +353,18 @@
                                     </div>
                                 </div>
                             </li>
+                            @endif
+
+                            @if (Auth::user()->role == 'admin')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
                                     data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/package -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-settings" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
+                                            class="icon icon-tabler icon-tabler-settings" width="28" height="28"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path
                                                 d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
@@ -364,6 +389,8 @@
                                     </div>
                                 </div>
                             </li>
+                            @endif
+
                         </ul>
                     </div>
                 </div>
@@ -379,11 +406,11 @@
                             </h2>
                         </div>
                         @isset($menu)
-                            <div class="col-12 col-md-auto ms-auto d-print-none">
-                                <div class="btn-list">
-                                    {{ $menu }}
-                                </div>
+                        <div class="col-12 col-md-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                {{ $menu }}
                             </div>
+                        </div>
                         @endisset
                     </div>
                 </div>
@@ -392,19 +419,19 @@
             <div class="page-body">
                 <div class="container-xl">
                     @if ($errors->any())
-                        <x-alert>
-                            <x-slot:type>alert-danger</x-slot>
-                                <x-slot:title>Error</x-slot>
-                                    {{ $errors->first() }}
-                        </x-alert>
+                    <x-alert>
+                        <x-slot:type>alert-danger</x-slot>
+                            <x-slot:title>Error</x-slot>
+                                {{ $errors->first() }}
+                    </x-alert>
                     @endif
 
                     @if (session('alert'))
-                        <x-alert>
-                            <x-slot:type>alert-info</x-slot>
-                                <x-slot:title>Info</x-slot>
-                                    {{ session('alert') }}
-                        </x-alert>
+                    <x-alert>
+                        <x-slot:type>alert-info</x-slot>
+                            <x-slot:title>Info</x-slot>
+                                {{ session('alert') }}
+                    </x-alert>
                     @endif
 
                     {{ $slot }}

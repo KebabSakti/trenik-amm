@@ -7,10 +7,11 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\WizardController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PicApproveController;
+use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ApprovalRuleController;
 use App\Http\Controllers\CreditSchemeController;
 
@@ -50,4 +51,6 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth'], function () {
     Route::resource('rule', ApprovalRuleController::class);
     Route::resource('barang', BarangController::class);
     Route::resource('employee', EmployeeController::class);
+    Route::resource('submission', SubmissionController::class);
+    Route::resource('picapprove', PicApproveController::class);
 });

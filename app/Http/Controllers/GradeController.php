@@ -152,7 +152,7 @@ class GradeController extends Controller
         foreach ($table as $r) {
             $data[] = [
                 $r->grade_name,
-                $r->max_credit,
+                'Rp ' . number_format($r->max_credit, 2, ',', '.'),
                 '<a class="btn btn-info btn-sm" href="' . route('grade.edit', $r->id) . '">Edit</a>
                  <form method="post" action="' . route('grade.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">

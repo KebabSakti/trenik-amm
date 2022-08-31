@@ -2,6 +2,7 @@ $(function () {
     const url = "http://localhost:1001/api/";
     const csrf = $("meta[name=csrf]").attr("content");
     const company = $("meta[name=company]").attr("content");
+    const user = $("meta[name=user]").attr("content");
 
     function AxiosInstance() {
         const instance = axios.create({
@@ -314,6 +315,112 @@ $(function () {
                 data: function (param) {
                     param.csrf = csrf;
                     param.company_id = company;
+                },
+                pages: 5,
+            }),
+        });
+    }
+
+    if ($("#submission-table").length) {
+        let submissionTable = $("#submission-table").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            order: [5, "desc"],
+            columns: [
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: url + "app/submission",
+                method: "POST",
+                data: function (param) {
+                    param.csrf = csrf;
+                    param.company_id = company;
+                    param.user_id = user;
+                },
+                pages: 5,
+            }),
+        });
+    }
+
+    if ($("#picapprove-table").length) {
+        let picApproveTable = $("#picapprove-table").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            order: [7, "desc"],
+            columns: [
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+                {
+                    searchable: false,
+                    orderable: true,
+                },
+                {
+                    searchable: false,
+                    orderable: false,
+                },
+            ],
+            ajax: $.fn.dataTable.pipeline({
+                url: url + "app/picapprove",
+                method: "POST",
+                data: function (param) {
+                    param.csrf = csrf;
+                    param.company_id = company;
+                    param.user_id = user;
                 },
                 pages: 5,
             }),

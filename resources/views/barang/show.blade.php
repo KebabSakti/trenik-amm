@@ -5,7 +5,7 @@
     <x-modal-form>
         <x-slot:id>pengajuan-modal</x-slot:id>
         <x-slot:title>Form Pengajuan</x-slot:title>
-        <form method="post" action="{{ route('grade.store') }}" enctype="multipart/form-data">
+        <form method="post" action="{{ route('submission.store') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
             <div class="mb-3">
@@ -17,11 +17,11 @@
                 <select name="credit_scheme_id" class="form-select" required>
                     <option value=""> - Pilih Cicilan - </option>
                     @foreach ($credit_schemes as $credit_scheme)
-                        <option value="{{ $credit_scheme->id }}">
-                            {{ $credit_scheme->count }}x | Harga : Rp
-                            {{ number_format($credit_scheme->price, 2, ',', '.') }} | Bulanan : Rp
-                            {{ number_format($credit_scheme->credit, 2, ',', '.') }}
-                        </option>
+                    <option value="{{ $credit_scheme->id }}">
+                        {{ $credit_scheme->count }}x | Harga : Rp
+                        {{ number_format($credit_scheme->price, 2, ',', '.') }} | Bulanan : Rp
+                        {{ number_format($credit_scheme->credit, 2, ',', '.') }}
+                    </option>
                     @endforeach
                 </select>
             </div>
@@ -55,6 +55,15 @@
                             <img src="{{ asset($product->product_image) }}" class="img-fluid">
                         </div>
                         <div>
+                            @if (!$submitable)
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-title">Tidak Bisa Pengajuan Kredit</h4>
+                                <div class="text-muted">
+                                    Anda memiliki cicilan yang belum selesai, atau anda memiliki pengajuan dengan status
+                                    pending
+                                </div>
+                            </div>
+                            @endif
                             <h1>{{ $product->product_name }}</h1>
                             <h3>{{ $product->product_brand }}</h3>
                             <p>
@@ -70,23 +79,25 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($credit_schemes as $credit_scheme)
-                                        <tr>
-                                            <td>
-                                                {{ $credit_scheme->count }}x
-                                            </td>
-                                            <td>
-                                                Rp {{ number_format($credit_scheme->price, 2, ',', '.') }}
-                                            </td>
-                                            <td>
-                                                Rp {{ number_format($credit_scheme->credit, 2, ',', '.') }}
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $credit_scheme->count }}x
+                                        </td>
+                                        <td>
+                                            Rp {{ number_format($credit_scheme->price, 2, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            Rp {{ number_format($credit_scheme->credit, 2, ',', '.') }}
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                             <a href="{{ url()->previous() }}" class="btn btn-warning">Kembali</a>
+                            @if ($submitable)
                             <a href="#" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#pengajuan-modal">Ajukan Cicilan</a>
+                            @endif
                         </div>
                     </div>
                 </div>

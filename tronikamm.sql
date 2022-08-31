@@ -12,6 +12,7 @@ CREATE TABLE `approvals` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `submission_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
+  `department_id` bigint(20) NOT NULL,
   `status` enum('approved','rejected') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `note` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -120,11 +121,11 @@ INSERT INTO `credit_schemes` (`id`, `product_id`, `count`, `price`, `credit`, `c
 (18,	193,	6,	2100000.00,	350000.00,	'2022-08-26 01:22:59',	'2022-08-27 15:41:17',	NULL),
 (19,	193,	9,	2160000.00,	240000.00,	'2022-08-26 01:22:59',	'2022-08-27 15:41:17',	NULL),
 (20,	193,	12,	2280000.00,	190000.00,	'2022-08-26 01:22:59',	'2022-08-27 15:41:17',	NULL),
-(21,	161,	1,	2600000.00,	2600000.00,	'2022-08-26 02:26:08',	'2022-08-26 02:26:08',	NULL),
-(22,	161,	3,	2640000.00,	8800000.00,	'2022-08-26 02:26:08',	'2022-08-26 02:26:08',	NULL),
-(23,	161,	6,	2700000.00,	450000.00,	'2022-08-26 02:26:08',	'2022-08-26 02:26:08',	NULL),
-(24,	161,	9,	2790000.00,	310000.00,	'2022-08-26 02:26:08',	'2022-08-26 02:26:08',	NULL),
-(25,	161,	12,	2880000.00,	240000.00,	'2022-08-26 02:26:08',	'2022-08-26 02:26:08',	NULL),
+(21,	161,	1,	2600000.00,	2600000.00,	'2022-08-28 14:07:25',	'2022-08-28 14:07:25',	NULL),
+(22,	161,	3,	2640000.00,	880000.00,	'2022-08-28 14:07:25',	'2022-08-28 14:07:25',	NULL),
+(23,	161,	6,	2700000.00,	450000.00,	'2022-08-28 14:07:25',	'2022-08-28 14:07:25',	NULL),
+(24,	161,	9,	2790000.00,	310000.00,	'2022-08-28 14:07:25',	'2022-08-28 14:07:25',	NULL),
+(25,	161,	12,	2880000.00,	240000.00,	'2022-08-28 14:07:25',	'2022-08-28 14:07:25',	NULL),
 (26,	64,	1,	1.00,	1.00,	'2022-08-27 00:56:47',	'2022-08-27 00:56:47',	NULL),
 (27,	64,	3,	1.00,	1.00,	'2022-08-27 00:56:47',	'2022-08-27 00:56:47',	NULL),
 (28,	64,	6,	1.00,	1.00,	'2022-08-27 00:56:47',	'2022-08-27 00:56:47',	NULL),
@@ -629,8 +630,8 @@ CREATE TABLE `submissions` (
   `user_id` bigint(20) NOT NULL,
   `product_id` bigint(20) NOT NULL,
   `credit_scheme_id` bigint(20) NOT NULL,
-  `submission_status` enum('pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payment_status` enum('unpaid','progress','paid') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `submission_status` enum('pending','approved','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `payment_status` enum('unpaid','progress','paid') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unpaid',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -640,6 +641,8 @@ CREATE TABLE `submissions` (
   KEY `submissions_paid_index` (`payment_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `submissions` (`id`, `user_id`, `product_id`, `credit_scheme_id`, `submission_status`, `payment_status`, `created_at`, `updated_at`) VALUES
+(1,	5,	161,	23,	'pending',	'unpaid',	'2022-08-28 22:08:35',	'2022-08-28 22:08:35');
 
 DROP TABLE IF EXISTS `submission_attachments`;
 CREATE TABLE `submission_attachments` (
@@ -652,6 +655,8 @@ CREATE TABLE `submission_attachments` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `submission_attachments` (`id`, `submission_id`, `foto`, `permit`, `created_at`, `updated_at`) VALUES
+(1,	1,	'attachtment/wfEVqh5rhcRbUl7AuGdmR9cthzXVZWwMgS2ff9SY.jpg',	'attachtment/TTpYlSqJY5wroSTTRgLDfrsWteD9z6FOxZ2p7RnM.jpg',	'2022-08-28 22:08:35',	'2022-08-28 22:08:35');
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -675,9 +680,9 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `users` (`id`, `company_id`, `role`, `email`, `password`, `api`, `active`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1,	1,	'admin',	'julian.aryo1989@gmail.com',	'$2y$10$eVioeAWPCvfdJJigb7gbKeJoCXngUC59aTG/couYOmIsWDqFJy0CC',	NULL,	0,	NULL,	'2022-08-16 05:17:47',	'2022-08-28 03:35:22',	NULL),
+(1,	1,	'admin',	'julian.aryo1989@gmail.com',	'$2y$10$eVioeAWPCvfdJJigb7gbKeJoCXngUC59aTG/couYOmIsWDqFJy0CC',	NULL,	0,	NULL,	'2022-08-16 05:17:47',	'2022-08-30 15:54:26',	NULL),
 (3,	3,	'admin',	'my.meww@gmail.com',	'$2y$10$MUGl5PoyShCHNG57EQ/dMOBDHwam3X.tFgFghmA.c5.USooAjUjMS',	'',	0,	NULL,	'2022-08-16 09:00:38',	'2022-08-16 09:00:38',	NULL),
-(5,	1,	'user',	'user1@test.com',	'$2y$10$Cdengt5vHOV6ZpAyxxxIWu9OcbWOBrpjVDiA4/phi4UmfZHki116W',	'1300ef13-1aaf-40e2-a511-b6c073361cb7',	1,	NULL,	'2022-08-27 09:29:56',	'2022-08-28 03:35:28',	NULL),
-(6,	1,	'pic',	'user2@test.com',	'$2y$10$3pVxBBeLACzgfRK44.f3YOwfQsMvZzFEJXiT1oy8wXlMKw914jvF.',	NULL,	1,	NULL,	'2022-08-27 09:34:55',	'2022-08-27 13:30:02',	NULL);
+(5,	1,	'user',	'user1@test.com',	'$2y$10$Cdengt5vHOV6ZpAyxxxIWu9OcbWOBrpjVDiA4/phi4UmfZHki116W',	NULL,	1,	NULL,	'2022-08-27 09:29:56',	'2022-08-29 15:50:17',	NULL),
+(6,	1,	'pic',	'user2@test.com',	'$2y$10$3pVxBBeLACzgfRK44.f3YOwfQsMvZzFEJXiT1oy8wXlMKw914jvF.',	'820c9f9d-8d28-4c5b-81d0-2b63e546bdb7',	1,	NULL,	'2022-08-27 09:34:55',	'2022-08-30 15:54:32',	NULL);
 
--- 2022-08-28 04:18:58
+-- 2022-08-31 06:49:10

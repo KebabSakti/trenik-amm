@@ -12,12 +12,12 @@
                                     <tr>
                                         <th>Karyawan</th>
                                         <th>Department</th>
-                                        <th>Posisi</th>
-                                        <th>Grade</th>
                                         <th>NIK</th>
                                         <th>Telp</th>
-                                        <th>KTP</th>
+                                        <th>Barang</th>
+                                        <th>Status</th>
                                         <th>Tanggal Ajuan</th>
+                                        <th>Update Terakhir</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>

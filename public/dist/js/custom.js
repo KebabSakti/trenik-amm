@@ -375,7 +375,7 @@ $(function () {
             processing: true,
             serverSide: true,
             searching: true,
-            order: [7, "desc"],
+            order: [6, "desc"],
             columns: [
                 {
                     searchable: true,
@@ -403,7 +403,7 @@ $(function () {
                 },
                 {
                     searchable: false,
-                    orderable: false,
+                    orderable: true,
                 },
                 {
                     searchable: false,

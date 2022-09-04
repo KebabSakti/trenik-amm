@@ -24,18 +24,17 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($credits as $credit)
-                                    @php
-                                    $paid = $credit->paid ? 'PAID':'UNPAID';
-                                    @endphp
-                                    <tr>
-                                        <td>{{$credit->month}}</td>
-                                        <td>{{number_format($credit->amount, 2, ',', '.')}}</td>
-                                        <td>{{$paid}}</td>
-                                        <td>
-                                            {{Carbon::parse($credit->updated_at,
-                                            'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString()}}
-                                        </td>
-                                    </tr>
+                                        @php
+                                            $paid = $credit->paid ? 'PAID' : 'UNPAID';
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $credit->month }}</td>
+                                            <td>{{ number_format($credit->amount, 2, ',', '.') }}</td>
+                                            <td>{{ $paid }}</td>
+                                            <td>
+                                                {{ Carbon::parse($credit->updated_at, 'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString() }}
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Approval;
 use Carbon\Carbon;
 use App\Models\Submission;
 use Illuminate\Support\Str;
@@ -63,6 +64,19 @@ class SubmissionController extends Controller
         $attach->foto = $request->foto->store('attachtment', 'custom');
         $attach->permit = $request->permit->store('attachtment', 'custom');
         $attach->save();
+
+        $rule = DB::table('approval_rules')
+            ->selectRaw('approval_rules.id, approval_rule_details.*')
+            ->join('approval_rule_details', 'approval_rule_details.approval_rule_id', '=', 'approval_rules.id')
+            ->where('approval_rules.department_id', Auth::user()->employee->department_id)
+            ->orderBy('approval_rule_details.approval_order', 'asc')
+            ->first();
+
+        $approval = new Approval;
+        $approval->submission_id = $submission->id;
+        $approval->user_id = Auth::user()->id;
+        $approval->department_id = $rule->department_id;
+        $approval->save();
 
         return redirect()->route('barang.index')->with('alert', 'Data berhasil di proses');
     }

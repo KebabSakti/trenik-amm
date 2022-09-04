@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PicApproveController extends Controller
 {
@@ -69,7 +71,14 @@ class PicApproveController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::table('approvals')
+            ->where('id', $id)
+            ->update([
+                'status' => $request->status,
+                'updated_at' => now()->toDateTimeString(),
+            ]);
+
+        return redirect()->route('picapprove.index')->with('alert', 'Data berhasil di proses');
     }
 
     /**
@@ -85,20 +94,27 @@ class PicApproveController extends Controller
 
     public function indexJSON(Request $request)
     {
-        $col = ['', '', '', '', '', '', '', 'submissions.created_at', ''];
+        $col = ['employees.employee_name', 'departments.deparment_name', 'employees.nik', 'employees.phone', 'products.product_name', '', 'submissions.created_at', 'submissions.updated_at', ''];
 
         $department = DB::table('employees')->where('user_id', $request->user_id)->first();
 
         $query = DB::table('submissions')
-            ->selectRaw('submissions.*, users.role, employees.employee_name, departments.department_name')
+            ->selectRaw('submissions.*, users.role, employees.employee_name, employees.nik, employees.phone, departments.department_name, products.product_name')
             ->join('users', 'submissions.user_id', '=', 'users.id')
             ->join('employees', 'employees.user_id', '=', 'users.id')
             ->join('departments', 'employees.department_id', '=', 'departments.id')
-            ->where('employees.department_id', $department->department_id);
+            ->join('products', 'submissions.product_id', '=', 'products.id')
+            ->whereIn('submissions.id', function ($q) use ($department) {
+                $q->select('submission_id')->from('approvals')->where('department_id', $department->department_id);
+            });
 
         if (!empty($request->search['value'])) {
             $query->where(function ($q) use ($request, $col) {
-                // $q->where('grade_name', 'like', '%' . $request->search['value'] . '%');
+                $q->oRwhere('employees.employee_name', 'like', '%' . $request->search['value'] . '%')
+                    ->oRwhere('departments.department_name', 'like', '%' . $request->search['value'] . '%')
+                    ->oRwhere('employees.nik', 'like', '%' . $request->search['value'] . '%')
+                    ->oRwhere('employees.phone', 'like', '%' . $request->search['value'] . '%')
+                    ->oRwhere('products.product_name', 'like', '%' . $request->search['value'] . '%');
             });
         }
 
@@ -118,16 +134,41 @@ class PicApproveController extends Controller
 
         $data = [];
         foreach ($table as $r) {
+            $approve = DB::table('approvals')->where('submission_id', $r->id)->where('department_id', $department->department_id)->first();
+
+            if ($approve->status == 'pending') {
+                $status = '<span class="badge rounded-pill text-bg-warning">Pending</span>';
+            }
+
+            if ($approve->status == 'rejected') {
+                $status = '<span class="badge rounded-pill text-bg-danger">Rejected</span>';
+            }
+
+            if ($approve->status == 'approved') {
+                $status = '<span class="badge rounded-pill text-bg-success">Approved</span>';
+            }
+
             $data[] = [
                 $r->employee_name,
                 $r->department_name,
-                '',
-                '',
-                '',
-                '',
-                '',
-                '',
-                '<a class="btn btn-info btn-sm" href="' . route('picapprove.show', $r->id) . '">Detail</a>',
+                $r->nik,
+                $r->phone,
+                $r->product_name,
+                $status,
+                Carbon::parse($r->created_at, 'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString(),
+                Carbon::parse($r->updated_at, 'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString(),
+                $approve->status != 'pending' ? '-' : '<form method="post" action="' . route('picapprove.update', $approve->id) . '" style="display:inline;">
+                    <input type="hidden" name="_token" value="' . $request->csrf . '">
+                    <input type="hidden" name="status" value="rejected">
+                    ' . method_field('PUT') . '
+                    <button type="submit" class="btn btn-danger btn-sm" href="#">Reject</button>
+                 </form>
+                 <form method="post" action="' . route('picapprove.update', $approve->id) . '" style="display:inline;">
+                    <input type="hidden" name="_token" value="' . $request->csrf . '">
+                    <input type="hidden" name="status" value="approved">
+                    ' . method_field('PUT') . '
+                    <button type="submit" class="btn btn-success btn-sm" href="#">Approve</button>
+                 </form>',
             ];
         }
 

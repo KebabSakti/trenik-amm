@@ -25,7 +25,11 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('app/dashboard');
+            if ($request->user()->role == 'admin') {
+                return redirect('app/employee');
+            }
+
+            return redirect('app/barang');
         }
 
         return redirect()->back()->withErrors("Login gagal, cek kembali email dan password anda");

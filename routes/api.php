@@ -13,7 +13,7 @@ use App\Http\Controllers\CreditSchemeController;
 use App\Http\Controllers\PicApproveController;
 use App\Http\Controllers\SubmissionController;
 
-Route::group(['prefix' => 'app', 'middleware' => 'api.access'], function () {
+Route::group(['prefix' => 'app', 'middleware' => 'api.access'], function () { //'middleware' => 'api.access'
     Route::post('department', [DepartmentController::class, 'indexJSON']);
     Route::post('jabatan', [JabatanController::class, 'indexJSON']);
     Route::post('grade', [GradeController::class, 'indexJSON']);

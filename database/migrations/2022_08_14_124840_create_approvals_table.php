@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('submission_id');
             $table->bigInteger('user_id');
             $table->bigInteger('department_id');
-            $table->enum('status', ['approved', 'rejected'])->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->text('note')->nullable();
             $table->timestamps();
             $table->index('submission_id');

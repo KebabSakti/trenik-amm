@@ -42,10 +42,15 @@
                             placeholder="Koperasi AMM Site Handil" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">No WA Admin Koperasi</label>
+                        <input name="phone" type="text" class="form-control" placeholder="+6281254982664" required>
+                        <small class="text-danger">* Gunakan kode wilayah (+62) pada no WA contoh +6281254982664</small>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Limit Per Bulan</label>
                         <input name="monthly_balance" type="number" class="form-control" placeholder="150.000.000"
                             min="0" required>
-                        <small class="text-muted">* di reset otomatis tiap bulan</small>
+                        <small class="text-danger">* di reset otomatis tiap bulan</small>
                     </div>
                     <div class="form-footer">
                         <button type="submit" class="btn btn-primary w-100">Daftar</button>

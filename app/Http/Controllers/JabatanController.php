@@ -152,7 +152,7 @@ class JabatanController extends Controller
                  <form method="post" action="' . route('jabatan.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">
                     ' . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger btn-sm" href="#">Hapus</button>
+                    <button type="submit" class="btn btn-danger btn-sm confirm">Hapus</button>
                  </form>',
             ];
         }

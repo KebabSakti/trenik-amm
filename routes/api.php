@@ -9,6 +9,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ApprovalRuleController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CreditSchemeController;
 use App\Http\Controllers\PicApproveController;
 use App\Http\Controllers\SubmissionController;

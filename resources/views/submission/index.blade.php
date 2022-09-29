@@ -15,6 +15,7 @@
                                         <th>Skema Kredit</th>
                                         <th>Status Cicilan</th>
                                         <th>Status Pengajuan</th>
+                                        <th>Catatan</th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Update Terakhir</th>
                                         <th>#</th>

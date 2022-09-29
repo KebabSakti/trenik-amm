@@ -29,9 +29,9 @@
                                         <div class="col-10">
                                             <select name="department_ids[]" class="form-select" required>
                                                 <option value="">- List Department -</option>
-                                                @foreach ($departments as $department)
-                                                    <option value="{{ $department->id }}">
-                                                        {{ $department->department_name }}
+                                                @foreach ($approvals as $approval)
+                                                    <option value="{{ $approval->id }}">
+                                                        {{ $approval->department_name }}
                                                     </option>
                                                 @endforeach
                                             </select>

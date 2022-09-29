@@ -43,12 +43,14 @@ class WizardController extends Controller
             'email' => 'bail|required|unique:users',
             'password' => 'bail|required|min:6',
             'company_name' => 'bail|required',
+            'phone' => 'bail|required',
             'monthly_balance' => 'bail|required|numeric|min:0',
         ]);
 
         $company = new Company();
         $company->company_name = $request->company_name;
         $company->monthly_balance = $request->monthly_balance;
+        $company->phone = $request->phone;
         $company->save();
 
         $user = new User();
@@ -56,6 +58,7 @@ class WizardController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role = 'admin';
+        $user->active = 1;
         $user->save();
 
         return redirect('/')->with("alert", "Data berhasil ditambahkan");

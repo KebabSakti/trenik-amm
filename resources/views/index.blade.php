@@ -33,9 +33,9 @@
                     <div class="mb-2">
                         <label class="form-label">
                             Password
-                            <span class="form-label-description">
+                            {{-- <span class="form-label-description">
                                 <a href="#">Lupa password</a>
-                            </span>
+                            </span> --}}
                         </label>
                         <div class="input-group input-group-flat">
                             <input name="password" type="password" class="form-control" placeholder="Password" required>

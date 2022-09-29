@@ -74,12 +74,12 @@ class BarangController extends Controller
             })
             ->get();
 
-        $submission = DB::table('submissions')
+        $submitable = DB::table('submissions')
             ->where('user_id', Auth::user()->id)
-            ->where('payment_status', '!=', 'paid')
+            ->whereIn('payment_status', ['unpaid', 'progress'])
             ->first();
 
-        $submitable = ($submission == null);
+        $submitable = ($submitable == null);
 
         return view('barang.show', [
             'product' => $product,

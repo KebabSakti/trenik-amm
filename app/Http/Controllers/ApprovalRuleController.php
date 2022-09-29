@@ -35,8 +35,11 @@ class ApprovalRuleController extends Controller
             ->where('company_id', Auth::user()->company_id)
             ->get();
 
+        $approvals = Department::where('company_id', Auth::user()->company_id)->get();
+
         return view('rule.create', [
-            'departments' => $departments
+            'departments' => $departments,
+            'approvals' => $approvals
         ]);
     }
 
@@ -204,7 +207,7 @@ class ApprovalRuleController extends Controller
                  <form method="post" action="' . route('rule.destroy', $r->id) . '" style="display:inline;">
                     <input type="hidden" name="_token" value="' . $request->csrf . '">
                     ' . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger btn-sm" href="#">Hapus</button>
+                    <button type="submit" class="btn btn-danger btn-sm confirm">Hapus</button>
                  </form>',
             ];
         }

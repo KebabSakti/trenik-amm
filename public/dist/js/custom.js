@@ -3,6 +3,8 @@ $(function () {
     const csrf = $("meta[name=csrf]").attr("content");
     const company = $("meta[name=company]").attr("content");
     const user = $("meta[name=user]").attr("content");
+    const startOfYear = moment().startOf("year");
+    const endOfyear = moment().endOf("year");
 
     function AxiosInstance() {
         const instance = axios.create({
@@ -18,6 +20,18 @@ $(function () {
 
         return instance;
     }
+
+    $("body").on("click", ".confirm", function (e) {
+        const prompt = window.confirm(
+            "Proses ini tidak dapat di kembalikan, lanjutkan ?"
+        );
+
+        if (prompt) {
+            return;
+        }
+
+        e.preventDefault();
+    });
 
     if ($("#department-table").length) {
         let departmentTable = $("#department-table").DataTable({
@@ -346,6 +360,10 @@ $(function () {
                 },
                 {
                     searchable: false,
+                    orderable: false,
+                },
+                {
+                    searchable: false,
                     orderable: true,
                 },
                 {
@@ -371,59 +389,98 @@ $(function () {
     }
 
     if ($("#picapprove-table").length) {
-        let picApproveTable = $("#picapprove-table").DataTable({
-            processing: true,
-            serverSide: true,
-            searching: true,
-            order: [6, "desc"],
-            columns: [
-                {
-                    searchable: true,
-                    orderable: true,
+        let picApproveTable;
+
+        function loadPicApproveTable(start_date, end_date) {
+            picApproveTable = $("#picapprove-table").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: true,
+                order: [6, "desc"],
+                columns: [
+                    {
+                        searchable: true,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: false,
+                    },
+                    {
+                        searchable: true,
+                        orderable: true,
+                    },
+                    {
+                        searchable: true,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: true,
+                    },
+                    {
+                        searchable: false,
+                        orderable: false,
+                    },
+                ],
+                ajax: $.fn.dataTable.pipeline({
+                    url: url + "app/picapprove",
+                    method: "POST",
+                    data: function (param) {
+                        param.csrf = csrf;
+                        param.company_id = company;
+                        param.user_id = user;
+                        param.start_date = start_date.format("DD-MM-YYYY");
+                        param.end_date = end_date.format("DD-MM-YYYY");
+                    },
+                    pages: 5,
+                }),
+            });
+        }
+
+        $('input[name="daterange"]').daterangepicker(
+            {
+                showDropdowns: true,
+                alwaysShowCalendars: true,
+                startDate: startOfYear,
+                endDate: endOfyear,
+                locale: {
+                    format: "DD/MM/YYYY",
                 },
-                {
-                    searchable: false,
-                    orderable: false,
+                ranges: {
+                    "Hari ini": [moment(), moment()],
+                    "Bulan ini": [
+                        moment().startOf("month"),
+                        moment().endOf("month"),
+                    ],
+                    "Tahun ini": [
+                        moment().startOf("year"),
+                        moment().endOf("year"),
+                    ],
                 },
-                {
-                    searchable: true,
-                    orderable: true,
-                },
-                {
-                    searchable: true,
-                    orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: true,
-                },
-                {
-                    searchable: false,
-                    orderable: false,
-                },
-            ],
-            ajax: $.fn.dataTable.pipeline({
-                url: url + "app/picapprove",
-                method: "POST",
-                data: function (param) {
-                    param.csrf = csrf;
-                    param.company_id = company;
-                    param.user_id = user;
-                },
-                pages: 5,
-            }),
-        });
+            },
+            function (start, end) {
+                $('input[name="start_date_list_pengajuan"]').val(start);
+                $('input[name="end_date_list_pengajuan"]').val(end);
+
+                picApproveTable.destroy();
+
+                loadPicApproveTable(start, end);
+            }
+        );
+
+        loadPicApproveTable(startOfYear, endOfyear);
     }
 });

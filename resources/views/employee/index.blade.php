@@ -1,6 +1,12 @@
 <x-layout>
     <x-slot:title>List Karyawan</x-slot:title>
     <x-slot:menu>
+        <a href="{{ route('excel_employee') }}" class="btn btn-success" target="_blank">
+            Excel
+        </a>
+        <a href="{{ route('pdf_employee') }}" class="btn btn-danger" target="_blank">
+            PDF
+        </a>
         <a href="{{ route('employee.create') }}" class="btn btn-primary">
             Tambah Data
         </a>

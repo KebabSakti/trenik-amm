@@ -8,7 +8,6 @@ use App\Models\Submission;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\SubmissionAttachment;
 use Illuminate\Support\Facades\Auth;
 
 class SubmissionController extends Controller
@@ -41,42 +40,30 @@ class SubmissionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'product_id' => 'bail|required',
-            'credit_scheme_id' => 'bail|required',
-            'foto' => 'bail|required',
-            'permit' => 'bail|required',
-            'consent' => 'bail|required',
-        ]);
+        DB::transaction(function () use ($request) {
+            $request->validate([
+                'product_id' => 'bail|required',
+                'credit_scheme_id' => 'bail|required',
+                'foto' => 'bail|required',
+                'permit' => 'bail|required',
+                'consent' => 'bail|required',
+                'phone' => 'required',
+            ]);
 
-        if (!$request->hasFile('foto') && !$request->hasFile('permit')) {
-            return redirect()->back()->withErrors('Upload foto dan mine permit anda');
-        }
+            if (!$request->hasFile('foto') && !$request->hasFile('permit')) {
+                return redirect()->back()->withErrors('Upload foto dan mine permit anda');
+            }
 
-        $submission = new Submission;
-        $submission->user_id = Auth::user()->id;
-        $submission->product_id = $request->product_id;
-        $submission->credit_scheme_id = $request->credit_scheme_id;
-        $submission->save();
-
-        $attach = new SubmissionAttachment;
-        $attach->submission_id = $submission->id;
-        $attach->foto = $request->foto->store('attachtment', 'custom');
-        $attach->permit = $request->permit->store('attachtment', 'custom');
-        $attach->save();
-
-        $rule = DB::table('approval_rules')
-            ->selectRaw('approval_rules.id, approval_rule_details.*')
-            ->join('approval_rule_details', 'approval_rule_details.approval_rule_id', '=', 'approval_rules.id')
-            ->where('approval_rules.department_id', Auth::user()->employee->department_id)
-            ->orderBy('approval_rule_details.approval_order', 'asc')
-            ->first();
-
-        $approval = new Approval;
-        $approval->submission_id = $submission->id;
-        $approval->user_id = Auth::user()->id;
-        $approval->department_id = $rule->department_id;
-        $approval->save();
+            $submission = new Submission;
+            $submission->user_id = Auth::user()->id;
+            $submission->product_id = $request->product_id;
+            $submission->credit_scheme_id = $request->credit_scheme_id;
+            $submission->product_note = $request->product_note;
+            $submission->phone = $request->phone;
+            $submission->foto_ktp = $request->foto->store('attachment', 'custom');
+            $submission->foto_permit = $request->permit->store('attachment', 'custom');
+            $submission->save();
+        });
 
         return redirect()->route('barang.index')->with('alert', 'Data berhasil di proses');
     }
@@ -89,7 +76,9 @@ class SubmissionController extends Controller
      */
     public function show($id)
     {
-        $credits = DB::table('credits')->where('submission_id', $id)->get();
+        $credits = DB::table('credits')
+            ->where('submission_id', $id)
+            ->get();
 
         return view('submission.show', [
             'credits' => $credits
@@ -172,16 +161,45 @@ class SubmissionController extends Controller
         foreach ($table as $r) {
             $schemes = DB::table('credit_schemes')->where('id', $r->credit_scheme_id)->first();
 
+            if ($r->submission_status == 'pending') {
+                $status = '<span class="badge rounded-pill text-bg-warning">PENDING</span>';
+            }
+
+            if ($r->submission_status == 'rejected') {
+                $status = '<span class="badge rounded-pill text-bg-danger">REJECTED</span>';
+            }
+
+            if ($r->submission_status == 'approved') {
+                $status = '<span class="badge rounded-pill text-bg-success">APPROVED</span>';
+            }
+
+            if ($r->payment_status == 'unpaid') {
+                $payment = '<span class="badge rounded-pill text-bg-warning">UNPAID</span>';
+            }
+
+            if ($r->payment_status == 'progress') {
+                $payment = '<span class="badge rounded-pill text-bg-info">PROGRESS</span>';
+            }
+
+            if ($r->payment_status == 'paid') {
+                $payment = '<span class="badge rounded-pill text-bg-success">PAID</span>';
+            }
+
+            if ($r->payment_status == 'canceled') {
+                $payment = '<span class="badge rounded-pill text-bg-danger">CANCELED</span>';
+            }
+
             $data[] = [
                 $r->product_name,
                 'Cicilan : ' . $schemes->count . 'x
                 <br>Harga : Rp ' . number_format($schemes->price, 2, ',', '.') . '
                 <br>Bulanan : Rp ' . number_format($schemes->credit, 2, ',', '.'),
-                Str::upper($r->payment_status),
-                Str::upper($r->submission_status),
+                $payment,
+                $status,
+                $r->status_note ?? '-',
                 Carbon::parse($r->created_at, 'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString(),
                 Carbon::parse($r->updated_at, 'UTC')->timezone('Asia/Kuala_Lumpur')->toDayDateTimeString(),
-                '<a class="btn btn-info btn-sm" href="' . route('submission.show', $r->id) . '">Detail</a>',
+                ($r->submission_status != 'approved') ? '-' : '<a class="btn btn-info btn-sm" href="' . route('submission.show', $r->id) . '">Detail</a>',
             ];
         }
 

@@ -15,9 +15,15 @@
     <link href="{{ asset('dist/css/datatables.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('dist/css/tabler.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('dist/css/fancybox.css') }}" rel="stylesheet" />
+    <link href="{{ asset('dist/css/daterangepicker.css') }}" rel="stylesheet" />
 </head>
 
 <body>
+    {{-- <div style="position: absolute; right:0; bottom:0; margin:0 4% 6% 0; z-index: 1000;">
+        <a href="https://wa.me/{{ Auth::user()->company->phone }}" target="_blank">
+            <img src="{{ asset('static/wa.png') }}" width="50">
+        </a>
+    </div> --}}
     <div class="page">
         <header class="navbar navbar-expand-md navbar-light d-print-none">
             <div class="container-xl">
@@ -87,11 +93,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                             @endforeach
+                                        @else
+                                            <div class="card-body">
+                                                Tidak ada pengajuan
+                                            </div>
                                         @endif
-                                        <div class="card-body">
-                                            Tidak ada pengajuan
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -128,6 +136,7 @@
                 <div class="navbar navbar-light">
                     <div class="container-xl">
                         <ul class="navbar-nav">
+
                             {{-- <li class="nav-item">
                                 <a class="nav-link" href="dashboard">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -172,46 +181,44 @@
                                 </li>
                             @endif
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-clipboard-text" width="28"
-                                            height="28" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                            </path>
-                                            <rect x="9" y="3" width="6" height="4"
-                                                rx="2"></rect>
-                                            <path d="M9 12h6"></path>
-                                            <path d="M9 16h6"></path>
-                                        </svg>
-                                    </span>
-                                    <span class="nav-link-title">
-                                        Kredit
-                                    </span>
-                                </a>
-                                <div class="dropdown-menu">
-                                    <div class="dropdown-menu-columns">
-                                        <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" href="{{ route('barang.index') }}">
-                                                List Barang
-                                            </a>
-                                            <a class="dropdown-item" href="{{ route('submission.index') }}">
-                                                Pengajuan
-                                            </a>
-                                            {{-- <a class="dropdown-item" href="">
-                                                Cicilan
-                                            </a> --}}
-
+                            @if (Auth::user()->role != 'admin')
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="icon icon-tabler icon-tabler-clipboard-text" width="28"
+                                                height="28" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path
+                                                    d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
+                                                </path>
+                                                <rect x="9" y="3" width="6" height="4"
+                                                    rx="2"></rect>
+                                                <path d="M9 12h6"></path>
+                                                <path d="M9 16h6"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="nav-link-title">
+                                            Kredit
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <div class="dropdown-menu-columns">
+                                            <div class="dropdown-menu-column">
+                                                <a class="dropdown-item" href="{{ route('barang.index') }}">
+                                                    List Barang
+                                                </a>
+                                                <a class="dropdown-item" href="{{ route('submission.index') }}">
+                                                    Pengajuan
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            @endif
 
                             @if (Auth::user()->role == 'admin' || Auth::user()->role == 'pic')
                                 <li class="nav-item">
@@ -312,13 +319,67 @@
                                                 <a class="dropdown-item" href="{{ route('rule.index') }}">
                                                     Aturan Pengajuan
                                                 </a>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('company.edit', Auth::user()->company_id) }}">
+                                                    Data Koperasi
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
                             @endif
 
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('company.show', Auth::user()->company_id) }}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-book" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+                                            <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+                                            <line x1="3" y1="6" x2="3" y2="19">
+                                            </line>
+                                            <line x1="12" y1="6" x2="12" y2="19">
+                                            </line>
+                                            <line x1="21" y1="6" x2="21" y2="19">
+                                            </line>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Syarat dan Ketentuan
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://wa.me/{{ Auth::user()->company->phone }}"
+                                    target="_blank">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-brand-whatsapp" width="28"
+                                            height="28" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>
+                                            <path
+                                                d="M9 10a0.5 .5 0 0 0 1 0v-1a0.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a0.5 .5 0 0 0 0 -1h-1a0.5 .5 0 0 0 0 1">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Whatsapp Koperasi
+                                    </span>
+                                </a>
+                            </li>
+
+
                         </ul>
+
                     </div>
                 </div>
             </div>
@@ -381,7 +442,7 @@
                                             d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
                                     </svg>
                                     by
-                                    <a href="https://vjtechsolution.my.id" target="_blank" class="link-secondary"
+                                    <a href="https://vjtechsolution.co.id" target="_blank" class="link-secondary"
                                         rel="noopener">
                                         VJ TECH SOLUTION
                                     </a>
@@ -396,7 +457,7 @@
                                     All rights reserved
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="./changelog.html" class="link-secondary" rel="noopener">
+                                    <a href="#" class="link-secondary" rel="noopener">
                                         v1.0.0
                                     </a>
                                 </li>
@@ -413,6 +474,8 @@
     <script src="{{ asset('dist/js/datatables.min.js') }}" defer></script>
     <script src="{{ asset('dist/js/dpipeline.js') }}" defer></script>
     <script src="{{ asset('dist/js/fancybox.umd.js') }}" defer></script>
+    <script src="{{ asset('dist/js/moment.min.js') }}" defer></script>
+    <script src="{{ asset('dist/js/daterangepicker.js') }}" defer></script>
     <!-- Tabler Core -->
     <script src="{{ asset('dist/js/tabler.min.js') }}" defer></script>
     <script src="{{ asset('dist/js/custom.js') }}" defer></script>

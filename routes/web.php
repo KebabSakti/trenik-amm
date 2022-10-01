@@ -8,6 +8,7 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\WizardController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\ProductController;
@@ -47,6 +48,7 @@ Route::group(['prefix' => 'app', 'middleware' => 'auth'], function () {
         Route::get('/', [DashboardController::class, 'index']);
     });
 
+    Route::resource('account', AccountController::class);
     Route::resource('company', CompanyController::class);
     Route::resource('department', DepartmentController::class);
     Route::resource('jabatan', JabatanController::class);
